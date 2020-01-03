@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "209802224703",
+    "firebase_url": "https://bstickers.firebaseio.com",
+    "project_id": "bstickers",
+    "storage_bucket": "bstickers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209802224703:android:7d69fa9d8e37f4ff39848a",
+        "android_client_info": {
+          "package_name": "com.example.bstickers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209802224703-ggds8e3779acjvak2tc4ff6cgm3h6ot6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bstickers",
+            "certificate_hash": "0aad21bb9ef8d618f7c7b54152ab3cf47780c505"
+          }
+        },
+        {
+          "client_id": "209802224703-6puogdhqld1q959j1prhefng3b1pq3h8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2a1cuglS50Hv_dVEWIbmxGZtH0YSQjvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209802224703-6puogdhqld1q959j1prhefng3b1pq3h8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
