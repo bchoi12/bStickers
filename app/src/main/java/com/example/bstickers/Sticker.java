@@ -22,6 +22,9 @@ public class Sticker {
         keywords = meta[3].split(",");
     }
 
+    public String name() { return name; }
+    public String desc() { return desc; }
+
     public String getUrl() {
         return Global.IMG_URL + fname;
     }

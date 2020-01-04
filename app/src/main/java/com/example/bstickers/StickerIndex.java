@@ -47,11 +47,17 @@ public class StickerIndex extends JobIntentService {
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    Task<Void> task = FirebaseAppIndex.getInstance().remove(pack.getIndexUrl());
+                    final ArrayList<String> indexUrls = new ArrayList<>();
+                    for (Sticker s : pack.stickers()) {
+                        indexUrls.add(s.getIndexUrl());
+                    }
+                    indexUrls.add(pack.getIndexUrl());
+
+                    Task<Void> task = FirebaseAppIndex.getInstance().remove(indexUrls.toArray(new String[indexUrls.size()]));
                     task.addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void v) {
-                            Toast.makeText(context, "Removed " + pack.name() + ", it may take a few moments for the cache to be cleared", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Removed " + indexUrls.toString()  + ", it may take a few moments for the index to be cleared", Toast.LENGTH_LONG).show();
                         }
                     });
                     task.addOnFailureListener(new OnFailureListener() {
@@ -91,8 +97,7 @@ public class StickerIndex extends JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
         final Context context = getApplicationContext();
         final int index = intent.getIntExtra("index", 0);
-
-        StickerPack pack = stickerPacks.get(index);
+        final StickerPack pack = stickerPacks.get(index);
 
         List<Indexable> indexables = new ArrayList<>();
         indexables.add(pack.getPackBuilder().build());
@@ -105,7 +110,7 @@ public class StickerIndex extends JobIntentService {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void v) {
-                Toast.makeText(context, "Yay sticker! Please give the cache some time to adjust.", Toast.LENGTH_LONG)
+                Toast.makeText(context, "Yay " + pack.name() + "! Please give the index some time to adjust.", Toast.LENGTH_LONG)
                         .show();
             }
         });

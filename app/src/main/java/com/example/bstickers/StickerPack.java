@@ -36,6 +36,8 @@ public class StickerPack {
     public String dir() { return dir; }
     public String getIndexUrl() { return url; }
 
+    public List<Sticker> stickers() { return stickers; }
+
     public String getStickerUrl(int index) {
         index = index % stickers.size();
         if (index < 0) index += stickers.size();

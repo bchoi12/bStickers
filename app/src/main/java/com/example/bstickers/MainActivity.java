@@ -57,10 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void incrementSticker(View view) {
         sticker++;
+        if (sticker >= StickerIndex.getPack(pack).stickers().size()) sticker = 0;
+
         updateSticker();
     }
     public void decrementSticker(View view) {
         sticker--;
+        if (sticker < 0) sticker = StickerIndex.getPack(pack).stickers().size() - 1;
+
         updateSticker();
     }
 
@@ -73,5 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
         ((WebView) findViewById(R.id.stickerView)).loadUrl(sp.getStickerUrl(sticker));
         ((TextView) findViewById(R.id.title)).setText(sp.name());
+
+        Sticker s = sp.stickers().get(sticker);
+        ((TextView) findViewById(R.id.stickerInfo)).setText(s.name() + "\n" + s.desc());
     }
 }
