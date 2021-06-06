@@ -61,7 +61,6 @@ public class Board extends InputMethodService {
 
     private int width;
     private int height;
-    private int maxDimension;
     private int numPacksInRow;
     private int numStickersInRow;
 
@@ -98,7 +97,6 @@ public class Board extends InputMethodService {
         width = Resources.getSystem().getDisplayMetrics().widthPixels;
         height = Resources.getSystem().getDisplayMetrics().heightPixels;
 
-        maxDimension = Math.max(width, height);
         numPacksInRow = width / 200 + 1;
         numStickersInRow = width / 400 + 1;
 
@@ -109,8 +107,8 @@ public class Board extends InputMethodService {
             scale = 0.45;
         }
 
-        container.setMinHeight((int) (maxDimension * scale));
-        container.setMaxHeight((int) (maxDimension * scale));
+        container.setMinHeight((int) (height * scale));
+        container.setMaxHeight((int) (height * scale));
         stickerLayout.setColumnCount(numStickersInRow);
     }
 
@@ -159,6 +157,7 @@ public class Board extends InputMethodService {
             packButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    currentPack = packName;
                     populateStickers(packName);
                 }
             });
