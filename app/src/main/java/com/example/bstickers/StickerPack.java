@@ -1,8 +1,6 @@
 package com.example.bstickers;
 
-import com.google.firebase.appindexing.builders.Indexables;
-import com.google.firebase.appindexing.builders.StickerBuilder;
-import com.google.firebase.appindexing.builders.StickerPackBuilder;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,47 +8,32 @@ import java.util.List;
 public class StickerPack {
     private String name;
     private String dir;
-    private String url;
 
-    private StickerPackBuilder pack;
     private List<Sticker> stickers = new ArrayList<>();
-    private List<StickerBuilder> stickerBuilders = new ArrayList<>();
 
-    public StickerPack(String name, String dir) {
-        this.name = name;
+    public StickerPack(File dir) {
+        this(dir.getName());
+    }
+
+    public StickerPack(String dir) {
         this.dir = dir;
-        this.url = Global.PACK_URL_PREFIX + dir;
-
-        pack = Indexables.stickerPackBuilder()
-                .setName(name)
-                .setUrl(url);
+        this.name = dir;
     }
 
-    public void addSticker(Sticker sticker) {
-        stickers.add(sticker);
-        StickerBuilder builder = sticker.getBuilder(name);
-        stickerBuilders.add(builder);
-    }
+    public void setName(String name) { this.name = name; }
+
+    public void addSticker(Sticker sticker) { stickers.add(sticker); }
 
     public String name() { return name; }
     public String dir() { return dir; }
-    public String getIndexUrl() { return url; }
-
     public List<Sticker> stickers() { return stickers; }
 
-    public String getStickerUrl(int index) {
+    public boolean empty() { return stickers.size() == 0; }
+
+    public Sticker getSticker(int index) {
         index = index % stickers.size();
         if (index < 0) index += stickers.size();
 
-        return stickers.get(index).getUrl();
-    }
-
-    public List<StickerBuilder> getStickerBuilders() {
-        return stickerBuilders;
-    }
-
-    public StickerPackBuilder getPackBuilder() {
-        pack.setHasSticker(stickerBuilders.toArray(new StickerBuilder[stickerBuilders.size()]));
-        return pack;
+        return stickers.get(index);
     }
 }

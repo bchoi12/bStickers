@@ -26,7 +26,8 @@ public class MetaLoader extends AsyncTask<Void, Void, List<StickerPack>> {
                 if (data == null) break;
 
                 String[] title = data.split(SPLIT_CHAR);
-                StickerPack pack = new StickerPack(title[0], title[1]);
+                StickerPack pack = new StickerPack(title[1]);
+                pack.setName(title[0]);
 
                 while (true) {
                     data = in.readLine();
@@ -35,7 +36,18 @@ public class MetaLoader extends AsyncTask<Void, Void, List<StickerPack>> {
                         break;
                     }
 
-                    Sticker sticker = new Sticker(pack.dir(), data);
+                    String[] meta = data.split(SPLIT_CHAR);
+                    Sticker sticker = new Sticker(pack.dir(), meta[0]);
+                    if (meta.length >= 2) {
+                        sticker.setName(meta[1]);
+                    }
+                    if (meta.length >= 3) {
+                        sticker.setDescription(meta[2]);
+                    }
+                    if (meta.length >= 4) {
+                        sticker.setKeywords(meta[3].split(","));
+                    }
+
                     pack.addSticker(sticker);
                 }
             }

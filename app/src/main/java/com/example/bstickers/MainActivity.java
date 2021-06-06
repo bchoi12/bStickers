@@ -25,29 +25,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        WebView web = (WebView) findViewById(R.id.stickerView);
+        WebView web = findViewById(R.id.stickerView);
         web.getSettings().setUseWideViewPort(true);
         web.getSettings().setLoadWithOverviewMode(true);
+        web.setVerticalScrollBarEnabled(false);
 
-        StickerIndex.init();
+        StickerLoader.init();
         updatePack();
     }
 
     public void makeSticker(View view) {
-        StickerIndex.indexSticker(MainActivity.this, pack);
+        StickerLoader.savePack(MainActivity.this, pack);
     }
-    public void removeSticker(View view) { StickerIndex.removeSticker(view.getContext(), pack); }
+    public void removeSticker(View view) { StickerLoader.removePack(MainActivity.this, pack); }
 
     public void decrement(View view) {
-        if (!StickerIndex.hasIndex(pack-1)) {
-            pack = StickerIndex.size() - 1;
+        if (!StickerLoader.hasIndex(pack-1)) {
+            pack = StickerLoader.size() - 1;
         } else {
             pack--;
         }
         updatePack();
     }
     public void increment(View view) {
-        if (!StickerIndex.hasIndex(pack+1)) {
+        if (!StickerLoader.hasIndex(pack+1)) {
             pack = 0;
         } else {
             pack++;
@@ -57,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void incrementSticker(View view) {
         sticker++;
-        if (sticker >= StickerIndex.getPack(pack).stickers().size()) sticker = 0;
+        if (sticker >= StickerLoader.getPack(pack).stickers().size()) sticker = 0;
 
         updateSticker();
     }
     public void decrementSticker(View view) {
         sticker--;
-        if (sticker < 0) sticker = StickerIndex.getPack(pack).stickers().size() - 1;
+        if (sticker < 0) sticker = StickerLoader.getPack(pack).stickers().size() - 1;
 
         updateSticker();
     }
@@ -73,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
         updateSticker();
     }
     private void updateSticker() {
-        StickerPack sp = StickerIndex.getPack(pack);
+        StickerPack sp = StickerLoader.getPack(pack);
 
-        ((WebView) findViewById(R.id.stickerView)).loadUrl(sp.getStickerUrl(sticker));
+        ((WebView) findViewById(R.id.stickerView)).loadUrl(sp.getSticker(sticker).getUrl());
         ((TextView) findViewById(R.id.title)).setText(sp.name());
 
         Sticker s = sp.stickers().get(sticker);
-        ((TextView) findViewById(R.id.stickerInfo)).setText(s.name() + "\n" + s.desc());
+        ((TextView) findViewById(R.id.stickerInfo)).setText(s.name() + "\n" + s.description());
     }
 }
