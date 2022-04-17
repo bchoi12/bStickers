@@ -1,13 +1,13 @@
 package com.example.bstickers;
 
+import android.util.Log;
+
 import java.io.File;
 
 public class Sticker {
-
-    private static final String SPLIT_CHAR = "\\|";
-
     private String pack;
     private String fname;
+    private String imgFname;
 
     private String name;
     private String desc;
@@ -20,6 +20,13 @@ public class Sticker {
     public Sticker(String pack, String fname) {
         this.pack = pack;
         this.fname = fname;
+
+        if (fname.endsWith(".mp3")) {
+            int i = fname.lastIndexOf('.');
+            imgFname = fname.substring(0, i) + ".png";
+        } else {
+            imgFname = fname;
+        }
 
         // Set defaults for optional fields
         this.name = fname;
@@ -34,9 +41,13 @@ public class Sticker {
     public void setKeywords(String [] keywords) { this.keywords = keywords; }
 
     public String fname() { return fname; }
+    public String imgFname() { return imgFname; }
     public String name() { return name; }
     public String description() { return desc; }
     public String getUrl() {
         return Global.IMG_URL + pack + "/" + fname;
+    }
+    public String getPreviewUrl() {
+        return Global.IMG_URL + pack + "/" + imgFname;
     }
 }

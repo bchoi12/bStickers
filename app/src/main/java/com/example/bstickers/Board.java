@@ -13,20 +13,17 @@ import android.inputmethodservice.InputMethodService;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputBinding;
 import android.view.inputmethod.InputConnection;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,6 +47,7 @@ public class Board extends InputMethodService {
     private static Map<String, String> SUPPORTED_TYPES = new HashMap<String,String>(){{
         this.put("png", "image/png");
         this.put("gif", "image/gif");
+        this.put("mp3", "audio/mp3");
     }};
 
     private ConstraintLayout container;
@@ -181,8 +179,12 @@ public class Board extends InputMethodService {
         for (final File sticker : getStickers(packs.get(currentPack))) {
             ImageButton button = new ImageButton(this);
             button.setBackgroundColor(Color.WHITE);
-            button.setImageDrawable(Drawable.createFromPath(sticker.getPath()));
 
+            if (isAudio(sticker)) {
+                button.setImageDrawable(Drawable.createFromPath(getAudioImage(sticker)));
+            } else {
+                button.setImageDrawable(Drawable.createFromPath(sticker.getPath()));
+            }
             int size = width / numStickersInRow;
             button.setMinimumWidth(size);
             button.setMinimumHeight(size);
@@ -218,8 +220,7 @@ public class Board extends InputMethodService {
 
     @Override
     public boolean onEvaluateFullscreenMode() {
-        // In full-screen mode the inserted content is likely to be hidden by the IME. Hence in this
-        // sample we simply disable full-screen mode.
+        // In full-screen mode the inserted content is likely to be hidden by the IME.
         return false;
     }
 
@@ -260,6 +261,18 @@ public class Board extends InputMethodService {
         if (!SUPPORTED_TYPES.containsKey(getExtension(file))) return false;
 
         return true;
+    }
+
+    private String getAudioImage(File file) {
+        int i = file.getPath().lastIndexOf('.');
+        if (i <= 0) {
+            return "";
+        }
+        return file.getPath().substring(0, i) + ".png";
+    }
+
+    private boolean isAudio(File file) {
+        return file.getPath().endsWith("mp3");
     }
 
     private String getPreviewImage(StickerPack pack) {
@@ -306,6 +319,7 @@ public class Board extends InputMethodService {
             // a temporary read access to the recipient application without exporting your content
             // provider.
             flag = InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION;
+
         } else {
             // On API 24 and prior devices, we cannot rely on
             // InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION. You as an IME author

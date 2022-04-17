@@ -1,7 +1,5 @@
 package com.example.bstickers;
 
-import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +8,6 @@ public class StickerPack {
     private String dir;
 
     private List<Sticker> stickers = new ArrayList<>();
-
-    public StickerPack(File dir) {
-        this(dir.getName());
-    }
 
     public StickerPack(String dir) {
         this.dir = dir;

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
         web.getSettings().setUseWideViewPort(true);
         web.getSettings().setLoadWithOverviewMode(true);
         web.setVerticalScrollBarEnabled(false);
+
+        web.setWebViewClient(new WebViewClient()
+        {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url)
+            {
+                // Don't open webpage when previewing in Webview
+                return false;
+            }
+        });
 
         StickerLoader.init();
         updatePack();
@@ -76,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateSticker() {
         StickerPack sp = StickerLoader.getPack(pack);
 
-        ((WebView) findViewById(R.id.stickerView)).loadUrl(sp.getSticker(sticker).getUrl());
+        ((WebView) findViewById(R.id.stickerView)).loadUrl(sp.getSticker(sticker).getPreviewUrl());
         ((TextView) findViewById(R.id.title)).setText(sp.name());
 
         Sticker s = sp.stickers().get(sticker);

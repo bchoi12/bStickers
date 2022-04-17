@@ -33,28 +33,14 @@ public class StickerWriter extends AsyncTask<StickerPack, Boolean, Boolean> {
         }
 
         for (Sticker sticker : pack.stickers()) {
-            final File outputFile = new File(dir, sticker.fname());
-
-            URL url;
-            InputStream in;
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
             try {
-                url = new URL(sticker.getUrl());
-                in = new BufferedInputStream(url.openStream());
-                byte[] buf = new byte[1024];
-                int n;
-                while (-1 != (n = in.read(buf))) {
-                    out.write(buf, 0, n);
+                final File outputFile = new File(dir, sticker.fname());
+                writeFile(new URL(sticker.getUrl()), outputFile);
+
+                final File previewOutputFile = new File(dir, sticker.imgFname());
+                if (sticker.getPreviewUrl() != sticker.getUrl()) {
+                    writeFile(new URL(sticker.getPreviewUrl()), previewOutputFile);
                 }
-                out.close();
-                in.close();
-
-                byte[] response = out.toByteArray();
-                FileOutputStream fos = new FileOutputStream(outputFile);
-                fos.write(response);
-                fos.close();
-
-                Log.i("bcd", "wrote file " + outputFile.getPath());
             } catch (Exception e) {
                 publishProgress(false);
                 return false;
@@ -72,6 +58,23 @@ public class StickerWriter extends AsyncTask<StickerPack, Boolean, Boolean> {
         } else {
             Toast.makeText(context, "Failed to save sticker pack to local storage!", Toast.LENGTH_LONG).show();
         }
+    }
 
+    private void writeFile(URL url, File outputFile) throws Exception {
+        InputStream in = new BufferedInputStream(url.openStream());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        byte[] buf = new byte[1024];
+        int n;
+        while (-1 != (n = in.read(buf))) {
+            out.write(buf, 0, n);
+        }
+        out.close();
+        in.close();
+
+        byte[] response = out.toByteArray();
+        FileOutputStream fos = new FileOutputStream(outputFile);
+        fos.write(response);
+        fos.close();
     }
 }
