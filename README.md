@@ -1,6 +1,6 @@
 # bStickers
 
-Standalone Android keyboard with custom stickers & sticker packs from brianchoi.net
+Standalone Android keyboard with custom stickers & sticker packs
 
 Coming soon (?): support for downloading and sending custom audio clips - this is actually mostly implemented, but basically zero Android apps (e.g. messenger, whatsapp) accept inputting a random mp3 file from your keyboard
 
